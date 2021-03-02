@@ -103,6 +103,13 @@ type Options struct {
 	// Namespace restricts the cache's ListWatch to the desired namespace
 	// Default watches all namespaces
 	Namespace string
+
+	// FieldSelectorByResource restricts the cache's ListWatch to the desired
+	// fields per resource, the map's string values follow the field selector
+	// k8s format, for example "metadata.name=node01" and not all the fields are
+	// supported, k8s docs related to field selector [1].
+	// [1] https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
+	FieldSelectorByResource map[schema.GroupResource]string
 }
 
 var defaultResyncTime = 10 * time.Hour
@@ -113,7 +120,7 @@ func New(config *rest.Config, opts Options) (Cache, error) {
 	if err != nil {
 		return nil, err
 	}
-	im := internal.NewInformersMap(config, opts.Scheme, opts.Mapper, *opts.Resync, opts.Namespace)
+	im := internal.NewInformersMap(config, opts.Scheme, opts.Mapper, *opts.Resync, opts.Namespace, opts.FieldSelectorByResource)
 	return &informerCache{InformersMap: im}, nil
 }
 
