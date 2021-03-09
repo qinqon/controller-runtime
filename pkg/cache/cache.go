@@ -110,6 +110,12 @@ type Options struct {
 	// supported, k8s docs related to field selector [1].
 	// [1] https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
 	FieldSelectorByResource map[schema.GroupResource]string
+
+	// LabelSelectorByResource restricts the cache's ListWatch to the desired
+	// labels per resource, the map's string values follow the label selector
+	// k8s format, for example "environment=production,tier=frontend" a [1].
+	// [1] https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+	LabelSelectorByResource map[schema.GroupResource]string
 }
 
 var defaultResyncTime = 10 * time.Hour
